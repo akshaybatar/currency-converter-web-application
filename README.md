@@ -62,4 +62,4 @@ This currency converter web application allows users to easily and quickly conve
    EXCHANGE_RATE_API_KEY=your_api_key_here
    EXCHANGE_RATE_API_URL=https://api.example.com/latest
 
-Make sure to replace `https://github.com/akshaybatar/currency-converter-web-application` with the actual URL of your repository and update any other placeholders based on your project's specifics!
+`https://github.com/akshaybatar/currency-converter-web-application`
