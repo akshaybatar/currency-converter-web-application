@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('currency_histories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('from_currency', 3);
             $table->string('to_currency', 3);
             $table->decimal('amount', 15, 2);

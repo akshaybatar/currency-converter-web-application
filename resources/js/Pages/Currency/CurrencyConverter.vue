@@ -28,8 +28,9 @@
                     <div v-if="amountError" class="text-red-500 text-sm">{{ amountError }}</div>
                 </div>
 
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded col-span-2">
-                    Convert
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded col-span-2" :disabled="loading">
+                    <span v-if="loading">Processing...</span> <!-- Loading state -->
+                    <span v-else>Convert</span> <!-- Normal state -->
                 </button>
             </div>
         </form>
@@ -40,15 +41,18 @@
         </div>
 
         <!-- Display result -->
-        <div v-if="result" class="mt-4 text-lg font-semibold">
+        <div v-if="result" class="mt-4 text-lg font-semibold text-green-500">
             Result: {{ result }}
+        </div>
+        <div v-if="conversionRate" class="mt-2 text-md font-semibold">
+            Conversion Rate: {{ conversionRate }}
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import axios from 'axios';
+import { ref } from 'vue';
 
 // Static JSON data of countries with currency codes
 const countries = [
@@ -57,6 +61,14 @@ const countries = [
     { code: 'EUR', name: 'Euro' },
     { code: 'JPY', name: 'Japanese Yen' },
     { code: 'AUD', name: 'Australian Dollar' },
+    { code: 'CAD', name: 'Canadian Dollar' },  // Canadian Dollar
+    { code: 'CHF', name: 'Swiss Franc' },      // Swiss Franc
+    { code: 'CNY', name: 'Chinese Yuan' },     // Chinese Yuan
+    { code: 'NZD', name: 'New Zealand Dollar' }, // New Zealand Dollar
+    // { code: 'SGD', name: 'Singapore Dollar' },  // Singapore Dollar
+    { code: 'ZAR', name: 'South African Rand' }, // South African Rand
+    { code: 'MXN', name: 'Mexican Peso' },     // Mexican Peso
+    { code: 'BRL', name: 'Brazilian Real' }
     // Add more countries as needed
 ];
 
@@ -64,15 +76,18 @@ const from = ref('');
 const to = ref('');
 const amount = ref(null); // Initialize as null for validation
 const result = ref(null);
+const conversionRate = ref(null);
 const error = ref(null);
 const fromError = ref(false);
 const toError = ref(false);
 const amountError = ref(null);
+const loading = ref(false);
 
 const convertCurrency = async () => {
     // Reset previous errors
     error.value = null;
     result.value = null;
+    conversionRate.value = null;
     fromError.value = false;
     toError.value = false;
     amountError.value = null;
@@ -101,6 +116,7 @@ const convertCurrency = async () => {
     if (fromError.value || toError.value || amountError.value || error.value) {
         return;
     }
+    loading.value = true;
 
     try {
         // API request to convert currency
@@ -109,10 +125,23 @@ const convertCurrency = async () => {
             to: to.value,
             amount: amount.value,
         });
-        result.value = response.data.data.result;
+        result.value = response.data.result;
+        conversionRate.value = response.data.conversion_rate;
     } catch (err) {
-        // Handle API error
-        error.value = err.response?.data?.error || 'An error occurred while converting currency';
+        if (err.response) {
+            // Specific error handling for 429 Too Many Requests
+            if (err.response.status === 429) {
+                error.value = 'Too many requests. Please wait a moment before trying again.';
+                alert(error.value); // Optionally display an alert to the user
+            } else {
+                error.value = err.response.data.error || 'An error occurred while converting currency';
+            }
+        } else {
+            error.value = 'An unexpected error occurred. Please try again later.';
+        }
+    }
+    finally {
+        loading.value = false;  // Reset loading state
     }
 };
 </script>

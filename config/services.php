@@ -37,7 +37,7 @@ return [
 
     'currency' => [
         'api_key' => env('CURRENCY_API_KEY'),
-        'api_url' => 'https://data.fixer.io/api',
+        'api_url' => env('CURRENCY_API_URL'),
     ],
 
 ];

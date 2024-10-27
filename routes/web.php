@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\SearchHistoryController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,8 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware(['throttle:20,1','auth'])->group(function () {
+Route::middleware(['throttle:30,1', 'auth'])->group(function () {
     Route::post('/convert', [CurrencyController::class, 'convert']);
+    Route::get('/search-history', [SearchHistoryController::class, 'index']);
 });
 
 require __DIR__ . '/auth.php';

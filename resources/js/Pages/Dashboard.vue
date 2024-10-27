@@ -2,6 +2,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import CurrencyConverter from './Currency/CurrencyConverter.vue';
 import { Head } from '@inertiajs/vue3';
+import SearchHisrory from './Search/SearchHisrory.vue';
+
+
 </script>
 
 <template>
@@ -9,13 +12,7 @@ import { Head } from '@inertiajs/vue3';
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Dashboard
-            </h2>
-        </template>
-
-        <!-- <div class="py-12">
+        <div class="py-2">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
@@ -23,10 +20,13 @@ import { Head } from '@inertiajs/vue3';
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <CurrencyConverter>
             <!-- CurrencyConverter component is here -->
         </CurrencyConverter>
+
+        <SearchHisrory />
+
     </AuthenticatedLayout>
 
 </template>

@@ -18,17 +18,10 @@ class CurrencyService
     public function convert($from, $to, $amount)
     {
         try {
-            $response = Http::get("{$this->apiUrl}/convert", [
-                'access_key' => $this->apiKey,
-                'from' => $from,
-                'to' => $to,
-                'amount' => $amount,
-            ]);
-           
+            $response = Http::get("/{$this->apiUrl}/{$this->apiKey}/pair/{$from}/{$to}/{$amount}");
             if ($response->successful()) {
                 return $response->json();
             }
-
             return ['error' => 'Conversion failed.'];
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
