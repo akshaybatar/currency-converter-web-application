@@ -25,6 +25,7 @@ This currency converter web application allows users to easily and quickly conve
 
     ```bash
     composer install
+    npm install
     ```
 
 3. Copy the `.env.example` file to `.env` and configure your database settings:
@@ -40,10 +41,12 @@ This currency converter web application allows users to easily and quickly conve
     php artisan key:generate
     ```
 
-5. Run database migrations:
+5. Run database migrations and run application:
 
     ```bash
     php artisan migrate
+    npm run dev
+    php artisan serv
     ```
 
 6. database connections:
